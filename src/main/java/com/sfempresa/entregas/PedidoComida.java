@@ -2,24 +2,26 @@ package com.sfempresa.entregas;
 
 public class PedidoComida extends Pedido {
 
-    public PedidoComida(String idPedido, String direccionEntrega) {
-        super(idPedido, direccionEntrega, "Comida");
+    private String idPedido;
+
+    public PedidoComida(String idPedido, String direccionEntrega,
+                        double distanciaKm) {
+        super(idPedido, direccionEntrega, distanciaKm);
+        this.idPedido = idPedido;
     }
 
-    // Método genérico:
+    // Método para mostrar el tipo de pedido:
     @Override
-    public void asignarRepartidor() {
-        System.out.println("\n[Pedido Comida]");
-        System.out.println("Asignando repartidor...");
-        System.out.println("Verificando mochila térmica... OK");
+    public void mostrarResumen() {
+        System.out.println("Pedido Comida #" + idPedido);
+        super.mostrarResumen();
     }
 
-    // Método sobrecargado:
+    /* Cálculo de tiempo de entrega para pedidos de comida
+     * tiempo = 15 min + 2 min por cada kilómetro.
+     */
     @Override
-    public void asignarRepartidor(String nombreRepartidor) {
-        System.out.println("\n[Pedido Comida]");
-        System.out.println("Asignando repartidor...");
-        System.out.println("Verificando mochila térmica... OK");
-        System.out.println("→ Pedido asignado a " + nombreRepartidor);
+    public int calcularTiempoEntrega() {
+        return 15 + (int)(2 * getDistanciaKm());
     }
 }

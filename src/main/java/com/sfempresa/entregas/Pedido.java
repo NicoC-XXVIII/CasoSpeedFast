@@ -1,53 +1,45 @@
 package com.sfempresa.entregas;
 
-public class Pedido {
+public abstract class Pedido {
 
+    // Atributos comunes para los pedidos:
     private String idPedido;
     private String direccionEntrega;
-    private String tipoPedido;
+    private double distanciaKm;
 
-    public Pedido(String idPedido, String direccionEntrega, String tipoPedido) {
+    // Constructor con todos los atributos:
+    public Pedido(String idPedido, String direccionEntrega,
+                  double distanciaKm) {
         this.idPedido = idPedido;
         this.direccionEntrega = direccionEntrega;
-        this.tipoPedido = tipoPedido;
+        this.distanciaKm = distanciaKm;
     }
 
-    public String getIdPedido() {
-        return idPedido;
+    // Método para imprimir resumen por defecto del pedido:
+    public void mostrarResumen() {
+        System.out.println("Dirección de entrega: " + direccionEntrega);
+        System.out.println("Distancia: " + distanciaKm + " km");
     }
 
-    public String getDireccionEntrega() {
-        return direccionEntrega;
+    // Getter para que las subclases puedan calcular la distancia:
+    public double getDistanciaKm() {
+        return distanciaKm;
     }
 
-    public String getTipoPedido() {
-        return tipoPedido;
-    }
+    /** Método abstracto para calcular el tiempo de entrega:
+     * Cada clase implementa su propia fórmula.
+     */
+    public abstract int calcularTiempoEntrega();
 
-    public void setIdPedido(String idPedido) {
-        this.idPedido = idPedido;
-    }
-
-    public void setDireccionEntrega(String direccionEntrega) {
-        this.direccionEntrega = direccionEntrega;
-    }
-
-    public void setTipoPedido(String tipoPedido) {
-        this.tipoPedido = tipoPedido;
-    }
-
-    // Método de salida genérico:
-    public void asignarRepartidor() {
-        System.out.println("[Pedido genérico]");
-        System.out.println("Asignando a un repartidor...");
-        System.out.println("→ Pedido asignado a un repartidor");
-    }
-
-    // Método de salida sobrecargado:
-    public void asignarRepartidor(String nombreRepartidor) {
-        System.out.println("[Pedido genérico]");
-        System.out.println("Asignando a un repartidor...");
-        System.out.println("→ Pedido asignado a " + nombreRepartidor);
-
+    /* Utilización de Template Method:
+     * Las subclases no lo pueden modificar al ser "final"
+     */
+    public final void procesarPedido() {
+        mostrarResumen(); // Paso concreto
+        int tiempo = calcularTiempoEntrega(); // Paso variable implementado por las subclases
+        System.out.println("Tiempo estimado de entrega: " + tiempo + " minutos");
     }
 }
+
+
+

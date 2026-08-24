@@ -2,24 +2,30 @@ package com.sfempresa.entregas;
 
 public class PedidoExpress extends Pedido{
 
-    public PedidoExpress(String idPedido, String direccionEntrega) {
-        super(idPedido, direccionEntrega, "Express");
+    private String idPedido;
+
+    public PedidoExpress(String idPedido, String direccionEntrega,
+                         double distanciaKm) {
+        super(idPedido, direccionEntrega, distanciaKm);
+        this.idPedido = idPedido;
     }
 
-    // Método genérico:
+    // Método para mostrar el tipo de pedido:
     @Override
-    public void asignarRepartidor() {
-        System.out.println("\n[Pedido Express]");
-        System.out.println("Asignando repartidor...");
-        System.out.println("→ Repartidor más cercano con disponibilidad inmediata");
+    public void mostrarResumen() {
+        System.out.println("Pedido Express #" + idPedido);
+        super.mostrarResumen();
     }
 
-    // Método sobrecargado:
+    /* Cálculo de tiempo de entrega para pedidos expréss
+     * tiempo = 10 min base + 5 min extra si distancia > 5 km
+     */
     @Override
-    public void asignarRepartidor(String nombreRepartidor) {
-        System.out.println("\n[Pedido Express]");
-        System.out.println("Asignando repartidor...");
-        System.out.println("→ Repartidor más cercano con disponibilidad inmediata");
-        System.out.println("→ Pedido asignado a " + nombreRepartidor);
+    public int calcularTiempoEntrega() {
+        int tiempo = 10;
+        if (getDistanciaKm() > 5) {
+            tiempo += 5;
+        }
+        return tiempo;
     }
 }
