@@ -6,6 +6,7 @@ public abstract class Pedido {
     private String idPedido;
     private String direccionEntrega;
     private double distanciaKm;
+    protected String repartidorAsignado; // Para asignación automática o manuak
 
     // Constructor con todos los atributos:
     public Pedido(String idPedido, String direccionEntrega,
@@ -15,31 +16,31 @@ public abstract class Pedido {
         this.distanciaKm = distanciaKm;
     }
 
-    // Método para imprimir resumen por defecto del pedido:
-    public void mostrarResumen() {
-        System.out.println("Dirección de entrega: " + direccionEntrega);
-        System.out.println("Distancia: " + distanciaKm + " km");
+    // Getters para atributos idPedido y distanciaKm:
+    public String getIdPedido() {
+        return idPedido;
     }
 
-    // Getter para que las subclases puedan calcular la distancia:
     public double getDistanciaKm() {
         return distanciaKm;
     }
 
-    /** Método abstracto para calcular el tiempo de entrega:
-     * Cada clase implementa su propia fórmula.
-     */
+    // Método para mostrar resumen de los pedidos:
+    public void mostrarResumen() {
+        System.out.println("Pedido #" + idPedido);
+        System.out.println("Dirección de entrega: " + direccionEntrega);
+        System.out.println("Distancia: " + distanciaKm + " km");
+        System.out.println("Repartidor asignado: " + repartidorAsignado);
+    }
+
+    //Método para calcular tiempo de entrega según tipo de pedido:
     public abstract int calcularTiempoEntrega();
 
-    /* Utilización de Template Method:
-     * Las subclases no lo pueden modificar al ser "final"
-     */
-    public final void procesarPedido() {
-        mostrarResumen(); // Paso concreto
-        int tiempo = calcularTiempoEntrega(); // Paso variable implementado por las subclases
-        System.out.println("Tiempo estimado de entrega: " + tiempo + " minutos");
+    // Método sobrecargado para asignación manual de repartidor:
+    public void asignarRepartidor(String repartidor) {
+        this.repartidorAsignado = repartidor;
     }
+
+    // Método por sobreescritura para asignación automática de repartidor:
+    public abstract void asignarRepartidor();
 }
-
-
-
