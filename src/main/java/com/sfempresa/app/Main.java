@@ -3,57 +3,50 @@ package com.sfempresa.app;
 import com.sfempresa.entregas.*;
 import com.sfempresa.interfaces.*;
 import com.sfempresa.gestordatos.*;
-import java.util.ArrayList;
 
-public class Main {
-    public static void main(String[] args) {
+import java.sql.SQLOutput;
+import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-        System.out.println("\n===SERVICIO DE ENTREGAS SPEEDFAST===\n");
+    public class Main {
+        public static void main(String[] args) {
 
-        // Uso del gestor de datos para controlar y procesar los pedidos:
-        ControladorDeEnvios gestor = new ControladorDeEnvios();
-        System.out.println("---Gestión de entregas---");
+            System.out.println("\n===SERVICIO DE ENTREGAS SPEEDFAST===\n");
+            System.out.println("Visualización de entregas en tiempo real:\n");
 
-        // Creación y visualización de instancias de los diferentes tipos de pedidos:
-        PedidoComida comida = new PedidoComida("01313", "Av. Matta 321", 6);
-        PedidoEncomienda encomienda = new PedidoEncomienda("06767", "Av. La Paz 987", 9);
-        PedidoExpress express = new PedidoExpress("04321", "Av. Las Condes 8000", 12);
+            // Creación e impresión de objetos por consola:
+            PedidoComida comida1 = new PedidoComida("101", "Av. Italia 456", 4);
+            PedidoExpress express1 = new PedidoExpress("102", "Av. Matta 900", 3);
+            PedidoEncomienda encomienda1 = new PedidoEncomienda("103", "Av. Santa Rosa 567", 7);
 
-        // Asignación automática de repartidor:
-        comida.asignarRepartidor();
-        encomienda.asignarRepartidor();
-        express.asignarRepartidor();
+            PedidoComida comida2 = new PedidoComida("104", "Av. Portugal 200", 2);
+            PedidoExpress express2 = new PedidoExpress("105", "Av. Apoquindo 1500", 6);
+            PedidoEncomienda encomienda2 = new PedidoEncomienda("106", "Av. Independencia 123", 5);
 
-        // Asignación manual de repartidor:
-        comida.asignarRepartidor("Nicolás K");
-        encomienda.asignarRepartidor("Javier C");
-        express.asignarRepartidor("Daniela A");
+            // Repartidores con sus pedidos correspondientes:
+            Repartidor camila = new Repartidor("Camila",
+                    Arrays.asList(comida1, encomienda1));
 
-        // Mostrar resumen de los pedidos:
-        System.out.println("\nPedido de comida:");
-        comida.mostrarResumen();
-        System.out.println("Tiempo estimado de entrega: " + comida.calcularTiempoEntrega() + " minutos");
-        System.out.println("\nPedido de encomienda:");
-        encomienda.mostrarResumen();
-        System.out.println("Tiempo estimado de entrega: " + encomienda.calcularTiempoEntrega() + " minutos");
-        System.out.println("\nPedido express:");
-        express.mostrarResumen();
-        System.out.println("Tiempo estimado de entrega: " + express.calcularTiempoEntrega() + " minutos");
+            Repartidor luis = new Repartidor("Luis",
+                    Arrays.asList(express1, comida2));
 
-        // Registrar pedido en el historial:
-        gestor.registrarEntrega("Pedido de comida #01313 despachado por Nicolás");
-        gestor.registrarEntrega("Pedido de encomienda #06767 despachado por Javier");
-        gestor.registrarEntrega("Pedido express #04321 despachado por Daniela");
+            Repartidor daniela = new Repartidor("Daniela",
+                    Arrays.asList(express2, encomienda2));
 
-        // Cancelación de pedidos:
-        System.out.println("\nCancelando pedido de comida #01313...");
-        comida.cancelar();
+            /* Utilización de ExecutorService para ejecutar hilos en paralelo:
+             */
+            ExecutorService executor = Executors.newFixedThreadPool(3);
 
-        // Mostrar historial de entregas:
-        System.out.println();
-        gestor.verHistorial();
-        System.out.println("\nGracias por usar nuestro servicio.");
+            executor.execute(camila);
+            executor.execute(luis);
+            executor.execute(daniela);
+
+            executor.shutdown();
+
+            while (!executor.isTerminated()) {
+                // Esperando que todos los repartidores terminen...
+            }
+            System.out.println("Simulación completada. Todos los pedidos han sido entregados.");
+        }
     }
-}
-
-

@@ -24,6 +24,10 @@ public abstract class Pedido {
     public double getDistanciaKm() {
         return distanciaKm;
     }
+    public String getTipoPedido() {
+        return this.getClass().getSimpleName();
+    }
+
 
     // Método para mostrar resumen de los pedidos:
     public void mostrarResumen() {
