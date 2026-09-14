@@ -1,10 +1,10 @@
 # CasoSpeedFast
 
-Entrega Formativa — Semana 4 (Asignatura: DOO2)
+Entrega Sumativa 2 — Semana 5 (Asignatura: DOO2)
 
 ## Descripción
 
-CasoSpeedFast es un sistema de gestión de entregas que demuestra principios clave de **Programación Orientada a Objetos** en Java. El proyecto implementa un servicio de entregas rápidas con diferentes tipos de pedidos y lógica para calcular tiempos de entrega y gestionar repartidores.
+CasoSpeedFast es un sistema de gestión de entregas que demuestra principios clave de **Programación Orientada a Objetos** en Java. El proyecto implementa un servicio de entregas rápidas con diferentes tipos de pedidos, cada uno con su propia lógica de cálculo de tiempos y asignación de repartidores.
 
 Este ejercicio educativo ilustra:
 - **Herencia**: Estructura de clases especializadas
@@ -199,4 +199,4 @@ Sin licencia especificada. Considera añadir una licencia (MIT, Apache 2.0, GPL,
 
 **Autor/Mantenedor**: NicoC-XXVIII  
 **Asignatura**: DOO2 (Diseño Orientado a Objetos)  
-**Descripción**: Entrega Formativa Semana 4
+**Descripción**: Entrega Sumativa 2 Semana 5
