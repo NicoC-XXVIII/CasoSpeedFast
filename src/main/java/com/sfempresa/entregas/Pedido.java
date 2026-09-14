@@ -1,50 +1,35 @@
 package com.sfempresa.entregas;
 
-public abstract class Pedido {
+public class Pedido {
 
-    // Atributos comunes para los pedidos:
-    private String idPedido;
+    private int id;
     private String direccionEntrega;
-    private double distanciaKm;
-    protected String repartidorAsignado; // Para asignación automática o manuak
+    private EstadoPedido estado;
 
-    // Constructor con todos los atributos:
-    public Pedido(String idPedido, String direccionEntrega,
-                  double distanciaKm) {
-        this.idPedido = idPedido;
+    public Pedido(int id, String direccionEntrega) {
+        this.id = id;
         this.direccionEntrega = direccionEntrega;
-        this.distanciaKm = distanciaKm;
+        this.estado = EstadoPedido.PENDIENTE; // estado inicial
     }
 
-    // Getters para atributos idPedido y distanciaKm:
-    public String getIdPedido() {
-        return idPedido;
+    public int getId() {
+        return id;
     }
 
-    public double getDistanciaKm() {
-        return distanciaKm;
-    }
-    public String getTipoPedido() {
-        return this.getClass().getSimpleName();
+    public String getDireccionEntrega() {
+        return direccionEntrega;
     }
 
-
-    // Método para mostrar resumen de los pedidos:
-    public void mostrarResumen() {
-        System.out.println("Pedido #" + idPedido);
-        System.out.println("Dirección de entrega: " + direccionEntrega);
-        System.out.println("Distancia: " + distanciaKm + " km");
-        System.out.println("Repartidor asignado: " + repartidorAsignado);
+    public EstadoPedido getEstado() {
+        return estado;
     }
 
-    //Método para calcular tiempo de entrega según tipo de pedido:
-    public abstract int calcularTiempoEntrega();
-
-    // Método sobrecargado para asignación manual de repartidor:
-    public void asignarRepartidor(String repartidor) {
-        this.repartidorAsignado = repartidor;
+    public void setEstado(EstadoPedido nuevoEstado) {
+        this.estado = nuevoEstado;
     }
 
-    // Método por sobreescritura para asignación automática de repartidor:
-    public abstract void asignarRepartidor();
+    @Override
+    public String toString() {
+        return "[Pedido #" + id + " - Destino: " + direccionEntrega + " - Estado: " + estado + "]";
+    }
 }
