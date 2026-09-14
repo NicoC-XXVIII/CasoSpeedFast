@@ -1,10 +1,10 @@
 # CasoSpeedFast
 
-Entrega Formativa — Semana 2 (Asignatura: DOO2)
+Entrega Formativa — Semana 4 (Asignatura: DOO2)
 
 ## Descripción
 
-CasoSpeedFast es un sistema de gestión de entregas que demuestra principios clave de **Programación Orientada a Objetos** en Java. El proyecto implementa un servicio de entregas rápidas con diferentes tipos de pedidos, cada uno con características y tiempos de entrega particulares.
+CasoSpeedFast es un sistema de gestión de entregas que demuestra principios clave de **Programación Orientada a Objetos** en Java. El proyecto implementa un servicio de entregas rápidas con diferentes tipos de pedidos y lógica para calcular tiempos de entrega y gestionar repartidores.
 
 Este ejercicio educativo ilustra:
 - **Herencia**: Estructura de clases especializadas
@@ -68,7 +68,7 @@ javac -d out @sources.txt
 java -cp out com.sfempresa.app.Main
 ```
 
-### Opción A — Compilación con javac (Windows PowerShell)
+### Opción B — Compilación con javac (Windows PowerShell)
 
 ```powershell
 # Compilar
@@ -79,7 +79,7 @@ javac -d out @sources.txt
 java -cp out com.sfempresa.app.Main
 ```
 
-### Opción B — Con Maven
+### Opción C — Con Maven
 
 ```bash
 # Compilar
@@ -89,7 +89,7 @@ mvn clean compile
 mvn exec:java -Dexec.mainClass="com.sfempresa.app.Main"
 ```
 
-### Opción C — IDE
+### Opción D — IDE
 
 Importa el proyecto en tu IDE favorito (IntelliJ IDEA, Eclipse, VS Code) y ejecuta `Main.java`.
 
@@ -135,24 +135,29 @@ Gracias por usar nuestro servicio.
 ## Conceptos aplicados
 
 ### Herencia
+
 Las subclases (`PedidoComida`, `PedidoEncomienda`, `PedidoExpress`) heredan los atributos y métodos base de la clase abstracta `Pedido`.
 
 ### Polimorfismo
+
 Cada subclase sobrescribe `calcularTiempoEntrega()` con su propia lógica específica.
 
 ### Abstracción
+
 `Pedido` es una clase abstracta que define:
 - Atributos comunes: `idPedido`, `direccionEntrega`, `distanciaKm`, `repartidorAsignado`
 - Métodos abstractos: `calcularTiempoEntrega()`, `asignarRepartidor()`
 - Métodos concretos: `mostrarResumen()`, `asignarRepartidor(String)`
 
 ### Interfaces
+
 - **`Despachable`**: Define el método `despachar()`
 - **`Cancelable`**: Define el método `cancelar()`
 
 Cada tipo de pedido implementa ambas interfaces para proporcionar funcionalidad completa.
 
 ### Sobrecarga de métodos
+
 El método `asignarRepartidor()` existe en dos versiones:
 - **Sin parámetros**: Asignación automática (implementada en cada subclase)
 - **Con parámetro String**: Asignación manual (implementada en la clase base)
@@ -194,4 +199,4 @@ Sin licencia especificada. Considera añadir una licencia (MIT, Apache 2.0, GPL,
 
 **Autor/Mantenedor**: NicoC-XXVIII  
 **Asignatura**: DOO2 (Diseño Orientado a Objetos)  
-**Descripción**: Entrega Formativa Semana 2
+**Descripción**: Entrega Formativa Semana 4
