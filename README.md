@@ -1,224 +1,113 @@
 # CasoSpeedFast
 
-Entrega Sumativa 2 — Semana 5 (Asignatura: DOO2)
+Entrega formativa 4 — Semana 6 (Asignatura: DOO2)
 
 ## Descripción
 
-CasoSpeedFast es un sistema de gestión de entregas que demuestra principios clave de **Programación Orientada a Objetos** y **Programación Concurrente** en Java. El proyecto implementa un servicio de entregas rápidas mediante un modelo productor-consumidor con múltiples repartidores procesando pedidos simultáneamente.
+CasoSpeedFast es una aplicación Java para gestionar pedidos de entrega en una empresa de logística. La solución está desarrollada con Swing y sigue una estructura basada en MVC (Modelo, Vista y Controlador), permitiendo registrar pedidos, listarlos y visualizar la información en una interfaz gráfica.
 
-Este ejercicio educativo ilustra:
-- **Concurrencia**: Múltiples hilos (repartidores) procesando entregas en paralelo
-- **Thread-Safety**: Sincronización segura en operaciones compartidas
-- **Interfaces**: Implementación de `Runnable` para comportamiento concurrente
-- **Gestión de estado**: Estados de pedidos (PENDIENTE, EN_REPARTO, ENTREGADO)
-- **Patrones de diseño**: Patrón productor-consumidor
+La aplicación es una versión de escritorio del flujo de trabajo de una empresa de repartos, donde cada pedido queda asociado a:
 
-## Características principales
+- un identificador (`id`)
+- una dirección de entrega (`direccion`)
+- un tipo de entrega (`tipo`)
 
-- ✅ **Modelo concurrente** con múltiples repartidores
-- ✅ **Gestión sincronizada de pedidos** mediante `ZonaDeCarga`
-- ✅ **Clase de dominio `Pedido`** con estados bien definidos
-- ✅ **Repartidores como hilos** (`Repartidor implements Runnable`)
-- ✅ **Enum `EstadoPedido`** para transiciones de estado consistentes
-- ✅ **ExecutorService** para administración de hilos
-- ✅ **Simulación de entregas** con delays realistas
-- ✅ **Salida por consola** que muestra el flujo concurrente
+## Funcionalidades
+
+- Registrar nuevos pedidos desde una interfaz gráfica.
+- Seleccionar el tipo de entrega: `Comida`, `Encomienda` o `Express`.
+- Guardar los pedidos en memoria mediante un controlador.
+- Mostrar la lista de pedidos en una tabla.
+- Acceder desde una ventana principal con pestañas.
 
 ## Estructura del proyecto
 
-```
-src/main/java/com/sfempresa/
-├── app/
-│   └── Main.java                   (punto de entrada y orquestación)
-└── entregas/
-    ├── Pedido.java                 (modelo de dato con estado)
-    ├── EstadoPedido.java           (enum de estados)
-    ├── ZonaDeCarga.java            (gestor sincronizado de cola)
-    └── Repartidor.java             (implementa Runnable para entregas)
-```
-
-## Tecnologías
-
-- **Java 23** (según pom.xml)
-- **Maven** para build y gestión de dependencias
-- **java.util.concurrent** para gestión de hilos
-
-## Compilación y ejecución
-
-### Opción A — Maven (Recomendado)
-
-```bash
-# Compilar
-mvn clean compile
-
-# Ejecutar
-mvn exec:java -Dexec.mainClass="com.sfempresa.app.Main"
-```
-
-### Opción B — Compilación con javac (Linux/macOS)
-
-```bash
-# Compilar
-find src/main/java -name "*.java" > sources.txt
-javac -d out @sources.txt
-
-# Ejecutar
-java -cp out com.sfempresa.app.Main
-```
-
-### Opción C — Compilación con javac (Windows PowerShell)
-
-```powershell
-# Compilar
-Get-ChildItem -Recurse -Filter *.java src\main\java | ForEach-Object { $_.FullName } | Out-File sources.txt
-javac -d out @sources.txt
-
-# Ejecutar
-java -cp out com.sfempresa.app.Main
-```
-
-### Opción D — IDE
-
-Importa el proyecto en tu IDE favorito (IntelliJ IDEA, Eclipse, VS Code) y ejecuta `Main.java`.
-
-## Ejemplo de salida esperada
-
-```
-==SERVICIO DE ENTREGAS SPEEDFAST==
-
-[Zona de carga inicializada]
-
-[Repartidor - Juan] Retirando pedido #1...
-
-[Repartidor - Juan] Estado: EN_REPARTO
-
-[Repartidor - Juan] Entregando pedido #1...
-
-[Repartidor - Camila] Retirando pedido #2...
-
-[Repartidor - Camila] Estado: EN_REPARTO
-
-[Repartidor - Camila] Entregando pedido #2...
-
-[Repartidor - Pedro] Retirando pedido #3...
-
-[Repartidor - Pedro] Estado: EN_REPARTO
-
-[Repartidor - Pedro] Entregando pedido #3...
-
-[Repartidor - Juan] Estado: ENTREGADO
-
-[Repartidor - Juan] Retirando pedido #4...
-
-...
-
----Zona de carga vacía---
-
-Todos los pedidos han sido entregados exitosamente.
+```text
+src/
+├── main/
+│   └── java/
+│       └── com/
+│           └── sfempresa/
+│               ├── controlador/
+│               │   └── Main.java
+│               ├── modelo/
+│               │   ├── ControladorPedidos.java
+│               │   └── Pedido.java
+│               └── vista/
+│                   ├── VentanaListaPedidos.java
+│                   ├── VentanaPrincipal.java
+│                   └── VentanaRegistroPedido.java
+├── pom.xml
+└── README.md
 ```
 
 ## Componentes principales
 
-### Pedido.java
-Modelo de datos que representa una entrega individual:
-- `id`: identificador único del pedido
-- `direccionEntrega`: destino de la entrega
-- `estado`: estado actual (PENDIENTE, EN_REPARTO, ENTREGADO)
+### `com.sfempresa.modelo.Pedido`
+Representa un pedido del sistema con los atributos:
 
-### EstadoPedido.java
-Enumeración que define los estados posibles:
-- `PENDIENTE`: Pedido en la zona de carga
-- `EN_REPARTO`: Repartidor entregando el pedido
-- `ENTREGADO`: Entrega completada
+- `id`
+- `direccion`
+- `tipo`
 
-### ZonaDeCarga.java
-Gestor sincronizado que implementa el patrón productor-consumidor:
-- Almacena pedidos en una estructura sincronizada (típicamente `BlockingQueue` o similar)
-- `agregarPedido()`: añade un nuevo pedido (productor)
-- `retirarPedido()`: obtiene el siguiente pedido (consumidor)
-- Thread-safe para acceso concurrente
+### `com.sfempresa.modelo.ControladorPedidos`
+Encapsula la colección de pedidos y ofrece métodos para almacenarlos y consultarlos.
 
-### Repartidor.java
-Implementa `Runnable` para ejecutar en un hilo:
-- Lee pedidos de la `ZonaDeCarga`
-- Actualiza el estado a `EN_REPARTO`
-- Simula la entrega con `Thread.sleep(2000)`
-- Marca como `ENTREGADO`
-- Continúa hasta que no hay más pedidos
+### `com.sfempresa.vista.VentanaPrincipal`
+Ventana principal de la aplicación con pestañas para:
 
-### Main.java
-Orquestación del sistema:
-1. Crea una `ZonaDeCarga`
-2. Agrega 5 pedidos iniciales
-3. Crea 3 repartidores
-4. Ejecuta los repartidores en un `ExecutorService` con 3 hilos
-5. Espera a que terminen todas las entregas
+- registrar pedidos
+- listar pedidos
+- simular entregas
 
-## Conceptos aplicados
+### `com.sfempresa.vista.VentanaRegistroPedido`
+Formulario para ingresar un nuevo pedido con validación básica.
 
-### Concurrencia
-Multiple `Repartidor` instancias se ejecutan simultáneamente como hilos diferentes, compartiendo la misma `ZonaDeCarga` de forma segura.
+### `com.sfempresa.vista.VentanaListaPedidos`
+Muestra los pedidos actuales en una tabla Swing.
 
-### Thread-Safety
-`ZonaDeCarga` usa mecanismos de sincronización (probablemente `BlockingQueue`) para evitar condiciones de carrera cuando múltiples repartidores acceden simultáneamente.
+### `com.sfempresa.controlador.Main`
+Punto de entrada de la aplicación. Crea el controlador y abre la ventana principal.
 
-### Patrón Productor-Consumidor
-- **Productor**: `Main` agrega pedidos a `ZonaDeCarga`
-- **Consumidores**: `Repartidor` hilos que retiran y procesan pedidos
+## Tecnologías
 
-### Estados
-`EstadoPedido` enum asegura que las transiciones son válidas y consistentes:
-```
-PENDIENTE → EN_REPARTO → ENTREGADO
+- Java 23
+- Maven
+- Swing (GUI)
+- Programación orientada a objetos
+
+## Requisitos
+
+- Java JDK 23 o superior
+- Maven
+- IDE recomendado: IntelliJ IDEA, Eclipse o VS Code
+
+## Compilación y ejecución
+
+Desde la raíz del proyecto:
+
+```bash
+mvn compile
 ```
 
-### ExecutorService
-Gestiona eficientemente un pool de 3 hilos, evitando la creación/destrucción innecesaria de threads.
+Luego ejecuta la aplicación:
 
-## Flujo de ejecución
-
-```
-1. Main inicia
-2. ZonaDeCarga se inicializa (vacía)
-3. 5 pedidos se agregan a ZonaDeCarga
-4. 3 Repartidores comienzan a ejecutarse en paralelo
-5. Cada repartidor:
-   - Retira un pedido de la zona
-   - Cambia estado a EN_REPARTO
-   - Simula entrega (2 segundos)
-   - Cambia estado a ENTREGADO
-   - Repite hasta no haya pedidos
-6. ExecutorService espera a que terminen todos
-7. Programa finaliza
+```bash
+java -cp target/classes com.sfempresa.controlador.Main
 ```
 
-## Mejoras futuras
+## Flujo de uso
 
-- 🔲 Implementar persistencia de datos (archivos, base de datos)
-- 🔲 Agregar métodos de consulta del estado (historial de entregas)
-- 🔲 Extender con tipos de pedidos especializados (comida, paquete, documentos)
-- 🔲 Implementar prioridades en la cola de pedidos
-- 🔲 Agregar validaciones de entrada
-- 🔲 Implementar pruebas unitarias con JUnit
-- 🔲 Interfaz gráfica de usuario (GUI)
-- 🔲 API REST para integración
-- 🔲 Manejo de excepciones personalizado
-- 🔲 Estadísticas de desempeño (tiempo promedio de entrega, etc.)
+1. Se ejecuta `Main`.
+2. Se abre la ventana principal.
+3. En la pestaña "Registrar Pedido", se introduce el ID, dirección y tipo.
+4. El pedido se guarda en `ControladorPedidos`.
+5. La pestaña "Listar Pedidos" muestra la información en una tabla.
 
-## Contribuir
+## Observaciones
 
-1. Haz un fork del repositorio
-2. Crea una rama para tu mejora: `git checkout -b feat/mi-mejora`
-3. Haz commits descriptivos
-4. Abre un Pull Request con la descripción de tus cambios
-5. Añade pruebas cuando sea relevante
+Este repositorio corresponde a una aplicación de escritorio de gestión de entregas, con una estructura clara para una práctica de diseño orientado a objetos. El proyecto está orientado a mostrar una separación funcional entre modelo, vista y controlador, sin depender de bases de datos ni servicios externos.
 
-## Licencia
+## Autor
 
-Sin licencia especificada. Considera añadir una licencia (MIT, Apache 2.0, GPL, etc.) si planeas compartir abiertamente.
-
-## Contacto
-
-**Autor/Mantenedor**: NicoC-XXVIII  
-**Asignatura**: DOO2 (Diseño Orientado a Objetos)  
-**Descripción**: Entrega Sumativa 2 Semana 5
+NicoC-XXVIII
