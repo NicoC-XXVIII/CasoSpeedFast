@@ -2,6 +2,7 @@ package com.sfempresa.modelo;
 
 /**
  * Representa un pedido dentro del sistema SpeedFast.
+ * Se corresponde con la tabla "pedido" en la BD.
  */
 public class Pedido {
 
@@ -21,6 +22,6 @@ public class Pedido {
 
     @Override
     public String toString() {
-        return "Pedido #" + id + " - " + tipo + " - " + direccion;
+        return "Pedido #" + id + " | " + tipo + " | " + direccion;
     }
 }

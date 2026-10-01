@@ -1,14 +1,29 @@
 package com.sfempresa.controlador;
 
-import com.sfempresa.modelo.ControladorPedidos;
+import com.sfempresa.dao.ConexionBD;
 import com.sfempresa.vista.VentanaPrincipal;
 
+import java.sql.Connection;
+
 /**
- * Punto de entrada de la aplicación.
+ * Punto de entrada de la aplicación SpeedFast.
  */
 public class Main {
     public static void main(String[] args) {
-        ControladorPedidos controlador = new ControladorPedidos();
-        new VentanaPrincipal(controlador);
+        new VentanaPrincipal();
+
+        try {
+            Connection conn = ConexionBD.conectar();
+            System.out.println("\nConectando a la base de datos...\n");
+            System.out.println("Conexión exitosa.");
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error al conectar.");
+            e.printStackTrace();
+        }
     }
 }
+
+
+
+

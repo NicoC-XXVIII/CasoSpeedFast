@@ -1,15 +1,17 @@
 package com.sfempresa.vista;
 
 import com.sfempresa.modelo.*;
+import com.sfempresa.dao.*;
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Ventana para registrar nuevos pedidos.
+ * Panel que permite registrar nuevos pedidos,
+ * y guardarlos directamente en la BD.
  */
 public class VentanaRegistroPedido extends JPanel {
 
-    public VentanaRegistroPedido(ControladorPedidos controlador) {
+    public VentanaRegistroPedido() {
 
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -30,7 +32,7 @@ public class VentanaRegistroPedido extends JPanel {
         formulario.add(new JLabel("Tipo:"));
         formulario.add(cmbTipo);
 
-        JButton btnGuardar = new JButton("Guardar Pedido");
+        JButton btnGuardar = new JButton("Guardar Resultados");
 
         btnGuardar.addActionListener(e -> {
             try {
@@ -43,8 +45,10 @@ public class VentanaRegistroPedido extends JPanel {
                     return;
                 }
 
-                controlador.agregarPedido(new Pedido(id, dir, tipo));
-                JOptionPane.showMessageDialog(this, "Pedido registrado correctamente");
+                Pedido p = new Pedido(id, dir, tipo);
+                new PedidoDAO().guardar(p); // guarda en MySQL
+
+                JOptionPane.showMessageDialog(this, "Pedido guardado en la base de datos");
 
                 txtId.setText("");
                 txtDireccion.setText("");

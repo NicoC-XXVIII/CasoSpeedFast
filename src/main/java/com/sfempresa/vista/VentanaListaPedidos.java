@@ -1,16 +1,19 @@
 package com.sfempresa.vista;
 
 import com.sfempresa.modelo.*;
+import com.sfempresa.dao.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;
 
 /**
- * Ventana que muestra los pedidos registrados en una tabla.
+ * Panel que muestra los pedidos almacenados en la BD,
+ * utilizando JTable.
  */
 public class VentanaListaPedidos extends JPanel {
 
-    public VentanaListaPedidos(ControladorPedidos controlador) {
+    public VentanaListaPedidos() {
 
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -18,7 +21,9 @@ public class VentanaListaPedidos extends JPanel {
         String[] columnas = {"ID", "Dirección", "Tipo"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
 
-        for (Pedido p : controlador.getPedidos()) {
+        List<Pedido> pedidos = new PedidoDAO().listarTodos();
+
+        for (Pedido p : pedidos) {
             modelo.addRow(new Object[]{p.getId(), p.getDireccion(), p.getTipo()});
         }
 
