@@ -1,112 +1,172 @@
 # CasoSpeedFast
 
-Entrega formativa 4 — Semana 6 (Asignatura: DOO2)
+Entrega formativa 5 — Semana 7 (Asignatura: DOO2)
 
 ## Descripción
 
-CasoSpeedFast es una aplicación Java para gestionar pedidos de entrega en una empresa de logística. La solución está desarrollada con Swing y sigue una estructura basada en MVC (Modelo, Vista y Controlador), permitiendo registrar pedidos, listarlos y visualizar la información en una interfaz gráfica.
+CasoSpeedFast es una aplicación de escritorio desarrollada en Java para gestionar pedidos y entregas de una empresa de reparto. La solución utiliza Swing para la interfaz gráfica y JDBC para conectarse a una base de datos MySQL.
 
-La aplicación es una versión de escritorio del flujo de trabajo de una empresa de repartos, donde cada pedido queda asociado a:
+El proyecto está estructurado siguiendo el patrón MVC, separando la lógica de negocio, acceso a datos y presentación en paquetes distintos.
 
-- un identificador (`id`)
-- una dirección de entrega (`direccion`)
-- un tipo de entrega (`tipo`)
+## Funcionalidades actuales
 
-## Funcionalidades
-
-- Registrar nuevos pedidos desde una interfaz gráfica.
-- Seleccionar el tipo de entrega: `Comida`, `Encomienda` o `Express`.
-- Guardar los pedidos en memoria mediante un controlador.
-- Mostrar la lista de pedidos en una tabla.
-- Acceder desde una ventana principal con pestañas.
+- Registrar pedidos desde una ventana de Swing.
+- Registrar repartidores desde la interfaz principal.
+- Listar los pedidos almacenados en la base de datos.
+- Conectar con MySQL mediante JDBC.
+- Persistir la información en una base de datos relacional.
+- Ejecutar la app desde un único punto de entrada (`Main`).
 
 ## Estructura del proyecto
 
 ```text
-src/
-├── main/
-│   └── java/
-│       └── com/
-│           └── sfempresa/
-│               ├── controlador/
-│               │   └── Main.java
-│               ├── modelo/
-│               │   ├── ControladorPedidos.java
-│               │   └── Pedido.java
-│               └── vista/
-│                   ├── VentanaListaPedidos.java
-│                   ├── VentanaPrincipal.java
-│                   └── VentanaRegistroPedido.java
+CasoSpeedFast/
+├── .gitignore
 ├── pom.xml
-└── README.md
+├── README.md
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── com/
+│   │           └── sfempresa/
+│   │               ├── controlador/
+│   │               │   └── Main.java
+│   │               ├── dao/
+│   │               │   ├── ConexionBD.java
+│   │               │   ├── EntregaDAO.java
+│   │               │   ├── PedidoDAO.java
+│   │               │   └── RepartidorDAO.java
+│   │               ├── modelo/
+│   │               │   ├── Entrega.java
+│   │               │   ├── Pedido.java
+│   │               │   └── Repartidor.java
+│   │               └── vista/
+│   │                   ├── VentanaListaPedidos.java
+│   │                   ├── VentanaPrincipal.java
+│   │                   └── VentanaRegistroPedido.java
+│   └── script/
+│       └── speedfast_db.sql
+└── .idea/
 ```
 
 ## Componentes principales
 
-### `com.sfempresa.modelo.Pedido`
-Representa un pedido del sistema con los atributos:
-
-- `id`
-- `direccion`
-- `tipo`
-
-### `com.sfempresa.modelo.ControladorPedidos`
-Encapsula la colección de pedidos y ofrece métodos para almacenarlos y consultarlos.
+### `com.sfempresa.controlador.Main`
+Punto de entrada de la aplicación. Crea la ventana principal y prueba la conexión a la base de datos al iniciar.
 
 ### `com.sfempresa.vista.VentanaPrincipal`
-Ventana principal de la aplicación con pestañas para:
+Ventana principal con pestañas para acceder a:
 
-- registrar pedidos
-- listar pedidos
-- simular entregas
+- registro de pedidos
+- registro de repartidores
+- listado de pedidos
 
 ### `com.sfempresa.vista.VentanaRegistroPedido`
-Formulario para ingresar un nuevo pedido con validación básica.
+Formulario para introducir los datos del pedido o del repartidor según el caso de uso.
 
 ### `com.sfempresa.vista.VentanaListaPedidos`
-Muestra los pedidos actuales en una tabla Swing.
+Muestra la información de pedidos en una tabla Swing.
 
-### `com.sfempresa.controlador.Main`
-Punto de entrada de la aplicación. Crea el controlador y abre la ventana principal.
+### `com.sfempresa.dao.ConexionBD`
+Gestiona la conexión JDBC con MySQL leyendo las credenciales desde un archivo de propiedades.
+
+### `com.sfempresa.dao.PedidoDAO`
+Encapsula la lógica para guardar y consultar pedidos desde la base de datos.
+
+### `com.sfempresa.dao.RepartidorDAO`
+Encapsula la lógica para manejar repartidores en la base de datos.
+
+### `com.sfempresa.dao.EntregaDAO`
+Gestiona operaciones relacionadas con entregas y su relación con pedidos y repartidores.
+
+### `com.sfempresa.modelo.Pedido`
+Representa un pedido con su dirección y tipo.
+
+### `com.sfempresa.modelo.Repartidor`
+Representa a un repartidor del sistema.
+
+### `com.sfempresa.modelo.Entrega`
+Representa una entrega asociada a un pedido y un repartidor.
+
+## Base de datos
+
+El script SQL para crear la base de datos y las tablas se encuentra en:
+
+- `src/script/speedfast_db.sql`
+
+Estructura principal:
+
+- `repartidor(id, nombre)`
+- `pedido(id, direccion, tipo, estado)`
+- `entrega(id, id_pedido, id_repartidor, fecha, hora)`
+
+## Configuración de la conexión
+
+La aplicación intenta leer las credenciales desde este archivo:
+
+```text
+src/config/db.properties
+```
+
+Ejemplo de contenido:
+
+```properties
+url=jdbc:mysql://localhost:3306/speedfast_db
+user=root
+password=tu_contraseña
+```
+
+Importante:
+
+- El archivo `db.properties` no se incluye en el repositorio para no compartir credenciales locales.
+- Debes crearlo manualmente antes de ejecutar la aplicación.
 
 ## Tecnologías
 
 - Java 23
 - Maven
-- Swing (GUI)
-- Programación orientada a objetos
+- Swing
+- JDBC
+- MySQL Connector/J
 
 ## Requisitos
 
-- Java JDK 23 o superior
+- JDK 23 o superior
 - Maven
-- IDE recomendado: IntelliJ IDEA, Eclipse o VS Code
+- MySQL Server
+- IDE recomendada: IntelliJ IDEA, Eclipse o VS Code
 
-## Compilación y ejecución
+## Compilación
 
-Desde la raíz del proyecto:
+Desde la raíz del proyecto ejecuta:
 
 ```bash
 mvn compile
 ```
 
-Luego ejecuta la aplicación:
+## Ejecución
+
+Una vez compilado, puedes arrancar la aplicación con:
+
+```bash
+mvn exec:java -Dexec.mainClass=com.sfempresa.controlador.Main
+```
+
+O bien, si prefieres ejecutar la clase directamente:
 
 ```bash
 java -cp target/classes com.sfempresa.controlador.Main
 ```
 
-## Flujo de uso
+## Preparación previa
 
-1. Se ejecuta `Main`.
-2. Se abre la ventana principal.
-3. En la pestaña "Registrar Pedido", se introduce el ID, dirección y tipo.
-4. El pedido se guarda en `ControladorPedidos`.
-5. La pestaña "Listar Pedidos" muestra la información en una tabla.
+1. Crea la base de datos ejecutando `src/script/speedfast_db.sql`.
+2. Crea el archivo `src/config/db.properties` con tus credenciales de MySQL.
+3. Ejecuta la aplicación.
 
 ## Observaciones
 
-Este repositorio corresponde a una aplicación de escritorio de gestión de entregas, con una estructura clara para una práctica de diseño orientado a objetos. El proyecto está orientado a mostrar una separación funcional entre modelo, vista y controlador, sin depender de bases de datos ni servicios externos.
+Este repositorio corresponde a una práctica de diseño orientado a objetos y acceso a datos en Java, con una interfaz gráfica para la gestión de entregas de una empresa de repartos.
 
 ## Autor
 
