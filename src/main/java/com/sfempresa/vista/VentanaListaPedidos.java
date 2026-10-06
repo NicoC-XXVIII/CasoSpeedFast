@@ -21,7 +21,7 @@ public class VentanaListaPedidos extends JPanel {
         String[] columnas = {"ID", "Dirección", "Tipo"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
 
-        List<Pedido> pedidos = new PedidoDAO().listarTodos();
+        List<Pedido> pedidos = new PedidoDAO().readAll();
 
         for (Pedido p : pedidos) {
             modelo.addRow(new Object[]{p.getId(), p.getDireccion(), p.getTipo()});

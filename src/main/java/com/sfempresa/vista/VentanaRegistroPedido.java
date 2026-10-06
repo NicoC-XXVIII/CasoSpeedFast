@@ -5,60 +5,81 @@ import com.sfempresa.dao.*;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Panel que permite registrar nuevos pedidos,
- * y guardarlos directamente en la BD.
- */
-public class VentanaRegistroPedido extends JPanel {
+
+import com.sfempresa.dao.PedidoDAO;
+import com.sfempresa.modelo.Pedido;
+import javax.swing.*;
+import java.awt.*;
+
+public class VentanaRegistroPedido extends JFrame {
+
+    private JTextField txtDireccion;
+    private JComboBox<String> cbTipo;
+    private JComboBox<String> cbEstado;
 
     public VentanaRegistroPedido() {
 
-        setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setTitle("Registrar Pedido");
+        setSize(400, 250);
+        setLocationRelativeTo(null);
+        setLayout(new GridLayout(5, 2, 10, 10));
 
-        JPanel formulario = new JPanel(new GridLayout(0, 2, 5, 5));
-        formulario.setBorder(BorderFactory.createTitledBorder("Registrar Pedido"));
+        // Campos del formulario
+        add(new JLabel("Dirección:"));
+        txtDireccion = new JTextField();
+        add(txtDireccion);
 
-        JTextField txtId = new JTextField();
-        JTextField txtDireccion = new JTextField();
-        JComboBox<String> cmbTipo = new JComboBox<>(new String[]{"Comida", "Encomienda", "Express"});
+        add(new JLabel("Tipo:"));
+        cbTipo = new JComboBox<>(new String[]{"COMIDA", "ENCOMIENDA", "EXPRESS"});
+        add(cbTipo);
 
-        formulario.add(new JLabel("ID:"));
-        formulario.add(txtId);
+        add(new JLabel("Estado:"));
+        cbEstado = new JComboBox<>(new String[]{"PENDIENTE", "EN_REPARTO", "ENTREGADO"});
+        add(cbEstado);
 
-        formulario.add(new JLabel("Dirección:"));
-        formulario.add(txtDireccion);
+        JButton btnGuardar = new JButton("Guardar Pedido");
+        add(btnGuardar);
 
-        formulario.add(new JLabel("Tipo:"));
-        formulario.add(cmbTipo);
+        JButton btnLimpiar = new JButton("Limpiar");
+        add(btnLimpiar);
 
-        JButton btnGuardar = new JButton("Guardar Resultados");
-
+        // Acción: Guardar pedido
         btnGuardar.addActionListener(e -> {
-            try {
-                int id = Integer.parseInt(txtId.getText());
-                String dir = txtDireccion.getText();
-                String tipo = cmbTipo.getSelectedItem().toString();
 
-                if (dir.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "La dirección no puede estar vacía");
-                    return;
-                }
+            String dir = txtDireccion.getText().trim();
+            String tipo = cbTipo.getSelectedItem().toString();
+            String estado = cbEstado.getSelectedItem().toString();
 
-                Pedido p = new Pedido(id, dir, tipo);
-                new PedidoDAO().guardar(p); // guarda en MySQL
+            // Validación
+            if (dir.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La dirección es obligatoria");
+                return;
+            }
 
-                JOptionPane.showMessageDialog(this, "Pedido guardado en la base de datos");
+            // Crear objeto Pedido
+            Pedido p = new Pedido(0, dir, tipo, estado);
 
-                txtId.setText("");
-                txtDireccion.setText("");
+            // Guardar en BD usando el método correcto: create()
+            PedidoDAO dao = new PedidoDAO();
 
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "ID debe ser numérico");
+            if (dao.create(p)) {
+                JOptionPane.showMessageDialog(this, "Pedido registrado correctamente");
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al registrar el pedido");
             }
         });
 
-        add(formulario, BorderLayout.NORTH);
-        add(btnGuardar, BorderLayout.SOUTH);
+        // Acción: Limpiar campos
+        btnLimpiar.addActionListener(e -> limpiarCampos());
+    }
+
+    /**
+     * Limpia los campos del formulario
+     */
+    private void limpiarCampos() {
+        txtDireccion.setText("");
+        cbTipo.setSelectedIndex(0);
+        cbEstado.setSelectedIndex(0);
     }
 }
