@@ -1,20 +1,21 @@
 # CasoSpeedFast
 
-Entrega formativa 5 — Semana 7 (Asignatura: DOO2)
+Entrega sumativa 3 — Semana 8 (Asignatura: DOO2)
 
 ## Descripción
 
-CasoSpeedFast es una aplicación de escritorio desarrollada en Java para gestionar pedidos y entregas de una empresa de reparto. La solución utiliza Swing para la interfaz gráfica y JDBC para conectarse a una base de datos MySQL.
+CasoSpeedFast es una aplicación de escritorio desarrollada en Java para gestionar pedidos y entregas de una empresa de reparto. La solución utiliza Swing para la interfaz gráfica y JDBC para la persistencia de datos en MySQL.
 
 El proyecto está estructurado siguiendo el patrón MVC, separando la lógica de negocio, acceso a datos y presentación en paquetes distintos.
 
-## Funcionalidades actuales
+## Funcionalidades
 
 - Registrar pedidos desde una ventana de Swing.
 - Registrar repartidores desde la interfaz principal.
 - Listar los pedidos almacenados en la base de datos.
 - Conectar con MySQL mediante JDBC.
 - Persistir la información en una base de datos relacional.
+- Gestionar entregas asociadas a pedidos y repartidores.
 - Ejecutar la app desde un único punto de entrada (`Main`).
 
 ## Estructura del proyecto
@@ -56,10 +57,9 @@ Punto de entrada de la aplicación. Crea la ventana principal y prueba la conexi
 
 ### `com.sfempresa.vista.VentanaPrincipal`
 Ventana principal con pestañas para acceder a:
-
-- registro de pedidos
-- registro de repartidores
-- listado de pedidos
+- Registro de pedidos
+- Registro de repartidores
+- Listado de pedidos
 
 ### `com.sfempresa.vista.VentanaRegistroPedido`
 Formulario para introducir los datos del pedido o del repartidor según el caso de uso.
@@ -92,10 +92,9 @@ Representa una entrega asociada a un pedido y un repartidor.
 
 El script SQL para crear la base de datos y las tablas se encuentra en:
 
-- `src/script/speedfast_db.sql`
+`src/script/speedfast_db.sql`
 
 Estructura principal:
-
 - `repartidor(id, nombre)`
 - `pedido(id, direccion, tipo, estado)`
 - `entrega(id, id_pedido, id_repartidor, fecha, hora)`
@@ -116,8 +115,7 @@ user=root
 password=tu_contraseña
 ```
 
-Importante:
-
+**Importante:**
 - El archivo `db.properties` no se incluye en el repositorio para no compartir credenciales locales.
 - Debes crearlo manualmente antes de ejecutar la aplicación.
 
@@ -166,7 +164,7 @@ java -cp target/classes com.sfempresa.controlador.Main
 
 ## Observaciones
 
-Este repositorio corresponde a una práctica de diseño orientado a objetos y acceso a datos en Java, con una interfaz gráfica para la gestión de entregas de una empresa de repartos.
+Este repositorio corresponde a una práctica de diseño orientado a objetos y acceso a datos en Java, con una interfaz gráfica para la gestión de entregas de una empresa de repartos. Es la entrega sumativa 3 de la semana 8 de la asignatura DOO2.
 
 ## Autor
 
